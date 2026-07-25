@@ -1,0 +1,25 @@
+name: Aternos AFK Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */5 * * *'
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodni yuklash
+        uses: actions/checkout@v3
+
+      - name: Node.js o'rnatish
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Kutubxonalarni o'rnatish
+        run: npm install --omit=optional
+
+      - name: Botni ishga tushirish
+        run: node index.js
+        
