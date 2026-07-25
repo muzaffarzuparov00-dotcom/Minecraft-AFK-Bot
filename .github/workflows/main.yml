@@ -1,25 +1,24 @@
-name: Aternos AFK Bot
+const mineflayer = require('mineflayer');
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 */5 * * *'
+function createBot() {
+    const bot = mineflayer.createBot({
+        host: 'Uzlegend2.aternos.me',
+        port: 50273,
+        username: 'AFK_Bot'
+    });
 
-jobs:
-  run-bot:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Kodni yuklash
-        uses: actions/checkout@v3
+    bot.on('login', () => {
+        console.log('Bot serverga muvaffaqiyatli kirdi!');
+    });
 
-      - name: Node.js o'rnatish
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    bot.on('end', () => {
+        console.log('Bot uzildi, qayta ulanmoqda...');
+        setTimeout(createBot, 5000);
+    });
 
-      - name: Kutubxonalarni o'rnatish
-        run: npm install --omit=optional
+    bot.on('error', (err) => {
+        console.log('Xatolik:', err);
+    });
+}
 
-      - name: Botni ishga tushirish
-        run: node bot.js
-        
+createBot();
