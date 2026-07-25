@@ -1,81 +1,43 @@
-const mineflayer = require('mineflayer');
+const bedrock = require('bedrock-protocol');
 
-// Server ma'lumotlari to'g'ridan-to'g me'yorlandi
-const config = {
-    serverHost: 'Uzlegend2.aternos.me',
-    serverPort: 50273,
-    botUsername: 'AFK_Bot',
-    botChunk: 1
-};
+const serverHost = 'Uzlegend2.aternos.me';
+const serverPort = 50273; // Aternos Bedrock portingiz
+const botUsername = 'AFK_Bot';
 
-function startBot() {
-    const bot = mineflayer.createBot({
-        host: config.serverHost,
-        port: config.serverPort,
-        username: config.botUsername,
-        auth: 'offline',
-        version: 1.21.0.03,
-        viewDistance: config.botChunk
+function startBedrockBot() {
+    console.log('🚀 Bedrock (1.21.0) serverga ulanish boshlandi...');
+
+    const client = bedrock.createClient({
+        host: serverHost,
+        port: serverPort,
+        username: botUsername,
+        offline: true,       // Cracked (litsenziyasiz) serverlar uchun
+        version: '1.21.0'    // Serveringizning aniq Bedrock versiyasi
     });
 
-    let movementPhase = 0;
-    const STEP_INTERVAL = 1500;
-    const STEP_SPEED = 1;
-    const JUMP_DURATION = 500;
-
-    bot.on('spawn', () => {
-        setTimeout(() => {
-            bot.setControlState('sneak', true);
-            console.log(`✅ ${config.botUsername} is Ready and online!`);
-        }, 3000);
-
-        setTimeout(movementCycle, STEP_INTERVAL);
+    client.on('join', () => {
+        console.log(`✅ ${botUsername} Bedrock serverga muvaffaqiyatli kirdi va AFK turibdi!`);
     });
 
-    function movementCycle() {
-        if (!bot.entity) return;
-
-        switch (movementPhase) {
-            case 0:
-                bot.setControlState('forward', true);
-                bot.setControlState('back', false);
-                bot.setControlState('jump', false);
-                break;
-            case 1:
-                bot.setControlState('forward', false);
-                bot.setControlState('back', true);
-                bot.setControlState('jump', false);
-                break;
-            case 2:
-                bot.setControlState('forward', false);
-                bot.setControlState('back', false);
-                bot.setControlState('jump', true);
-                setTimeout(() => {
-                    bot.setControlState('jump', false);
-                }, JUMP_DURATION);
-                break;
-            case 3:
-                bot.setControlState('forward', false);
-                bot.setControlState('back', false);
-                bot.setControlState('jump', false);
-                break;
+    client.on('text', (packet) => {
+        if (packet.message) {
+            console.log(`[CHAT]: ${packet.message}`);
         }
-
-        movementPhase = (movementPhase + 1) % 4;
-        setTimeout(movementCycle, STEP_INTERVAL);
-    }
-
-    bot.on('error', (err) => {
-        console.error('⚠️ Error:', err.message);
     });
 
-    bot.on('end', () => {
-        console.log('⛔ Bot Disconnected! 10 soniyadan keyin qayta ulanadi...');
-        setTimeout(startBot, 10000);
+    client.on('disconnect', (reason) => {
+        console.log('⛔ Bot uzildi:', reason, '- 10 soniyadan keyin qayta ulanadi...');
+        setTimeout(startBedrockBot, 10000);
+    });
+
+    client.on('error', (err) => {
+        console.log('⚠️ Xatolik:', err.message || err);
     });
 }
 
-startBot();
+startBedrockBot();
 
-// Jarayon GitHub Actions'da yopilib ketmasligi uchun keep-alive
+// GitHub Actions jarayoni to'xtab qolmasligi uchun keep-alive
 setInterval(() => {}, 10000);
+
+                
