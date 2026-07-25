@@ -1,4 +1,4 @@
-name: Aternos AFK Bot
+name: Aternos Bedrock AFK Bot
 
 on:
   workflow_dispatch:
@@ -8,15 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Kodni yuklash
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Node.js o'rnatish
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: Kutubxonalarni o'rnatish
-        run: npm install mineflayer
+      - name: Bedrock kutubxonasini o'rnatish
+        run: npm install bedrock-protocol
 
       - name: Botni ishga tushirish
         run: node bot.js
