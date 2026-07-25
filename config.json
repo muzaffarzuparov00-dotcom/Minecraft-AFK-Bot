@@ -1,6 +1,6 @@
 {
-  "serverHost": "example.aternos.me",
-  "serverPort": 12345,
-  "botUsername": "MyBot",
+  "serverHost": "Uzlegend2.aternos.me",
+  "serverPort": 50273,
+  "botUsername": "AFK_Bot",
   "botChunk": 1
 }
