@@ -2,24 +2,23 @@ const bedrock = require('bedrock-protocol');
 const config = require('./config.json');
 
 function startBedrockBot() {
-    console.log('🚀 Bedrock (1.21.0) serverga ulanish boshlandi...');
+    console.log(`🚀 [${new Date().toLocaleTimeString()}] ${config.serverHost}:${config.serverPort} ga ulanish harakati...`);
 
     const client = bedrock.createClient({
         host: config.serverHost,
         port: config.serverPort,
         username: config.botUsername,
-        offline: true,       // Cracked serverlar uchun
-        version: '1.21.0'    // Serveringizning Bedrock versiyasi
+        offline: true,
+        connectTimeout: 15000, // 15 soniyada ulanmasa taym-aut beradi
+        version: '1.21.0'
+    });
+
+    client.on('spawn', () => {
+        console.log(`✅ ${config.botUsername} SERVERGA kirdi va o'yinda paydo bo'ldi!`);
     });
 
     client.on('join', () => {
-        console.log(`✅ ${config.botUsername} Bedrock serverga muvaffaqiyatli kirdi!`);
-    });
-
-    client.on('text', (packet) => {
-        if (packet.message) {
-            console.log(`[CHAT]: ${packet.message}`);
-        }
+        console.log(`📡 Server bilan bog'lanish o'rnatildi...`);
     });
 
     client.on('disconnect', (reason) => {
@@ -28,11 +27,12 @@ function startBedrockBot() {
     });
 
     client.on('error', (err) => {
-        console.log('⚠️ Xatolik:', err.message || err);
+        console.log('⚠️ Ulanishda xatolik:', err.message || err);
+        // Osilib qolmasligi uchun xato bo'lsa darhol qayta ulanadi
+        setTimeout(startBedrockBot, 10000);
     });
 }
 
 startBedrockBot();
 
-// GitHub Actions o'chib ketmasligi uchun keep-alive
 setInterval(() => {}, 10000);
