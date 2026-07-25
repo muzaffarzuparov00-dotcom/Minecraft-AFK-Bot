@@ -5,7 +5,7 @@ const config = {
     serverHost: 'Uzlegend2.aternos.me',
     serverPort: 50273,
     botUsername: 'AFK_Bot',
-    botChunk: 2
+    botChunk: 1
 };
 
 function startBot() {
@@ -14,7 +14,7 @@ function startBot() {
         port: config.serverPort,
         username: config.botUsername,
         auth: 'offline',
-        version: false,
+        version: 1.21.0.03,
         viewDistance: config.botChunk
     });
 
