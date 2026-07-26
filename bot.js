@@ -1,3 +1,15 @@
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Minecraft Bot active!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Port open on ${PORT}`);
+});
+
 const bedrock = require('bedrock-protocol');
 const config = require('./config.json');
 
