@@ -22,7 +22,7 @@ function startBedrockBot() {
         username: config.botUsername,
         offline: true,
         connectTimeout: 15000, // 15 soniyada ulanmasa taym-aut beradi
-        version: '1.21.0'
+        version: '1.26.33.1'
     });
 
     client.on('spawn', () => {
